@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Instrução de medida</title>
+  <style>
+    html, body {
+      margin: 0; height: 100%;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex; align-items: center; justify-content: center;
+      font-family: system-ui, sans-serif;
+    }
+    .box {
+      background: #fff; border-radius: 12px; padding: 20px 24px;
+      max-width: 760px; width: 95%; max-height: 90vh; overflow: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,.3); box-sizing: border-box;
+    }
+    .hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    h3 { margin: 0; font-size: 1.1rem; font-weight: 600; color: #1e293b; }
+    #x {
+      background: none; border: none; font-size: 1.6rem; line-height: 1;
+      cursor: pointer; color: #64748b; padding: 0 4px;
+    }
+    img { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 8px; display: block; background: #f8fafc; }
+    .err { color: #b91c1c; font-size: .9rem; margin: 8px 0 0; display: none; }
+  </style>
+</head>
+<body>
+  <div class="box" id="box">
+    <div class="hd">
+      <h3 id="t">Instrução de Medida</h3>
+      <button id="x" type="button" title="Fechar">&times;</button>
+    </div>
+    <img id="i" alt="Instrução de medida">
+    <p class="err" id="e">Não foi possível carregar a imagem de instrução.</p>
+  </div>
+  <script>
+    function fechar() {
+      try { parent.postMessage({ type: "epi-info-close" }, "*"); } catch (_) {}
+    }
+    document.getElementById("x").onclick = fechar;
+    document.body.addEventListener("click", function (e) {
+      if (e.target === document.body) fechar();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") fechar();
+    });
+    var q = new URLSearchParams(location.search);
+    var img = q.get("img") || "";
+    var title = q.get("title") || "Instrução de Medida";
+    document.getElementById("t").textContent = title;
+    var el = document.getElementById("i");
+    el.onerror = function () { document.getElementById("e").style.display = "block"; };
+    if (img) el.src = img;
+  </script>
+</body>
+</html>

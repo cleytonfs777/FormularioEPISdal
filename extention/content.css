@@ -1,0 +1,119 @@
+/* CBMMG - Formulário EPIs — estilos do painel injetado.
+   Objetivos:
+   1) No máximo 3 campos por linha (responsivo: 3 → 2 → 1).
+   2) Blindar inputs/selects contra o reset de CSS da página do LOIQ,
+      que estava deixando os controles invisíveis. */
+
+/* ---- Grade de no máximo 3 colunas ---------------------------------------- */
+#cbmmg-epi-root .epi-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  #cbmmg-epi-root .epi-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  #cbmmg-epi-root .epi-grid-3 { grid-template-columns: 1fr; }
+}
+
+#cbmmg-epi-root { line-height: 1.4; }
+
+/* ---- Blindagem dos controles de formulário ------------------------------- */
+/* A página do LOIQ zera a aparência de input/select; forçamos aqui com !important
+   para garantir que os campos apareçam com borda, fundo branco e altura. */
+#cbmmg-epi-root input[type="text"],
+#cbmmg-epi-root input[type="number"],
+#cbmmg-epi-root select,
+#cbmmg-epi-root textarea {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 6px 8px !important;
+  margin: 0 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  background-color: #fff !important;
+  color: #111827 !important;
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  box-shadow: none !important;
+  -webkit-appearance: auto !important;
+  -moz-appearance: auto !important;
+  appearance: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#cbmmg-epi-root input[type="text"],
+#cbmmg-epi-root input[type="number"],
+#cbmmg-epi-root select {
+  min-height: 34px !important;
+}
+
+#cbmmg-epi-root textarea {
+  min-height: 60px !important;
+  resize: vertical !important;
+}
+
+/* Select precisa da seta nativa; força aparência de menu-list. */
+#cbmmg-epi-root select {
+  -webkit-appearance: menulist !important;
+  -moz-appearance: menulist !important;
+  appearance: menulist !important;
+  cursor: pointer;
+}
+
+/* Campos desabilitados (readonly / conservação inativa). */
+#cbmmg-epi-root input:disabled,
+#cbmmg-epi-root input[readonly],
+#cbmmg-epi-root select:disabled {
+  background-color: #f3f4f6 !important;
+  cursor: not-allowed;
+  opacity: 0.85 !important;
+}
+
+/* Foco visível. */
+#cbmmg-epi-root input:focus,
+#cbmmg-epi-root select:focus,
+#cbmmg-epi-root textarea:focus {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 0 !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Botão de instrução (ℹ) — é um <span>, o LOIQ intercepta <button>. */
+#cbmmg-epi-root .epi-info-btn {
+  line-height: 1;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: inline-flex !important;
+}
+#cbmmg-epi-root .epi-info-btn:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+/* Host do modal de instrução (fica fora de #cbmmg-epi-root). */
+epi-info-modal {
+  display: block !important;
+  position: fixed !important;
+  z-index: 2147483647 !important;
+}
+
+/* Botão Enviar herda estilo inline; garante cursor e fonte. */
+#cbmmg-epi-root #epi-enviar {
+  font-family: inherit !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* A aba injetada usa o estilo do clone; só garante o cursor. */
+#td_borda_def\.tab\.custom_epi,
+#td_borda_def\.tab\.custom_epi a { cursor: pointer; }
+
+/* Painel visível quando ativo. */
+#td_conteudo_epi.tabVisivel { display: block; }

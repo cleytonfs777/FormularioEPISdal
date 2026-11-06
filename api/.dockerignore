@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.xlsx
+epi.db
+.git/
+.gitignore
+.env
+*.md

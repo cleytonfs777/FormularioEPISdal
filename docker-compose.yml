@@ -1,0 +1,34 @@
+# Banco visivel no Windows: ./data/epi.db
+# Bind da PASTA (nao do arquivo .db e nao de api/). Journal DELETE evita disk I/O error no Docker Desktop.
+#
+#   docker compose up --build
+#
+# Feche o SQLite Lite em data/epi.db enquanto a API grava, ou abra so para leitura.
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: cbmmg-epi-api:latest
+    container_name: cbmmg-epi-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./api/.env
+    environment:
+      DATABASE_URL: sqlite:////data/epi.db
+      SQLITE_JOURNAL_MODE: DELETE
+      TZ: America/Sao_Paulo
+      NO_PROXY: 127.0.0.1,localhost
+      no_proxy: 127.0.0.1,localhost
+      # ADMIN_USERNAME e ADMIN_PASSWORD vêm só de api/.env (env_file).
+    volumes:
+      - ./data:/data
+      - ./api/epi.db:/seed/epi.db:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 8s
+      retries: 5
+      start_period: 40s

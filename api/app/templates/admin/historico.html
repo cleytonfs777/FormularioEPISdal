@@ -1,0 +1,52 @@
+{% extends "admin/base.html" %}
+{% block title %}Histórico{% endblock %}
+{% block h1 %}Auditoria{% endblock %}
+{% block sub %}Decisões do admin (aprovadas e rejeitadas){% endblock %}
+{% block content %}
+<form class="filters" method="get" action="/admin/historico">
+  <label>Nº BM <input type="text" name="num_bm" value="{{ num_bm }}"></label>
+  <label>Campo <input type="text" name="campo" value="{{ campo }}"></label>
+  <label>Origem
+    <select name="origem">
+      <option value="">Todas</option>
+      <option value="aprovacao" {% if origem=='aprovacao' %}selected{% endif %}>aprovacao</option>
+      <option value="rejeicao" {% if origem=='rejeicao' %}selected{% endif %}>rejeicao</option>
+    </select>
+  </label>
+  <label>De <input type="date" name="de" value="{{ de }}"></label>
+  <label>Até <input type="date" name="ate" value="{{ ate }}"></label>
+  <button type="submit" class="btn-primary">Filtrar</button>
+</form>
+
+<table class="tbl">
+  <thead>
+    <tr>
+      <th>Quando</th>
+      <th>Nº BM</th>
+      <th>Campo</th>
+      <th>De</th>
+      <th>Para</th>
+      <th>Justificativa</th>
+      <th>Origem</th>
+      <th>Autor</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r.timestamp|br_dt }}</td>
+      <td>{{ r.num_bm }}</td>
+      <td>{{ rotulo(r.campo) }}</td>
+      <td>{{ r.valor_anterior }}</td>
+      <td>{{ r.valor_novo }}</td>
+      <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ r.justificativa or '' }}">{{ r.justificativa or '—' }}</td>
+      <td><span class="badge badge-{{ r.origem }}">{{ r.origem }}</span></td>
+      <td class="muted">{{ r.autor }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="8" class="empty">Nenhum evento de auditoria.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="count">{{ rows|length }} registro(s)</p>
+{% endblock %}

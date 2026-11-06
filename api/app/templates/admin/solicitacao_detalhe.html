@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+{% block title %}Solicitação {{ sol.id }}{% endblock %}
+{% block h1 %}Solicitação #{{ sol.id }}{% endblock %}
+{% block sub %}{{ sol.num_bm }} · {{ rotulo(sol.campo) }}{% endblock %}
+{% block content %}
+{% if request.query_params.get('erro') == 'motivo' %}
+<p class="alert-err">Informe o motivo da rejeição.</p>
+{% elif request.query_params.get('erro') == 'militar' %}
+<p class="alert-err">Militar não encontrado no banco. Não foi possível aprovar.</p>
+{% endif %}
+
+<div class="grid-2">
+  <section class="panel">
+    <h2>Militar</h2>
+    {% if militar %}
+    <dl class="kv">
+      <dt>Nº BM</dt><dd>{{ militar.num_bm }}</dd>
+      <dt>Nome</dt><dd>{{ militar.nome_completo }}</dd>
+      <dt>P/G</dt><dd>{{ militar.posto_grad }}</dd>
+      <dt>Unidade</dt><dd>{{ militar.unidade_lotacao }}</dd>
+    </dl>
+    {% else %}
+    <p class="muted">Registro do militar não localizado.</p>
+    {% endif %}
+  </section>
+  <section class="panel">
+    <h2>Pedido</h2>
+    <dl class="kv">
+      <dt>Status</dt><dd><span class="badge badge-{{ sol.status }}">{{ sol.status }}</span></dd>
+      <dt>Campo</dt><dd>{{ rotulo(sol.campo) }}</dd>
+      <dt>Solicitado por</dt><dd>{{ sol.solicitado_por }}</dd>
+      <dt>Em</dt><dd>{{ sol.solicitado_em|br_dt }}</dd>
+    </dl>
+  </section>
+</div>
+
+<section class="panel">
+  <h2>Diff</h2>
+  <table class="tbl diff">
+    <thead><tr><th></th><th>Anterior</th><th>Proposto</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>{{ rotulo(sol.campo) }}</td>
+        <td class="old">{{ sol.valor_anterior }}</td>
+        <td class="new">{{ sol.valor_novo }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="panel" style="border-left: 4px solid var(--orange);">
+  <h2>Justificativa da alteração (apresentada pelo militar)</h2>
+  {% if sol.justificativa %}
+  <p style="margin: 0; font-size: 13.5px; line-height: 1.55; background: var(--gray-50); padding: 12px 14px; border-radius: 4px; border: 1px solid var(--gray-200); white-space: pre-wrap; color: var(--gray-800);">{{ sol.justificativa }}</p>
+  {% else %}
+  <p class="muted" style="margin: 0; font-style: italic;">Nenhuma justificativa apresentada pelo solicitante.</p>
+  {% endif %}
+</section>
+
+{% if sol.status == 'pendente' %}
+<div class="actions">
+  <form method="post" action="/admin/solicitacao/{{ sol.id }}/aprovar">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit" class="btn-primary">Aprovar e gravar</button>
+  </form>
+  <form method="post" action="/admin/solicitacao/{{ sol.id }}/rejeitar" class="reject-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Motivo da rejeição
+      <textarea name="motivo" required rows="3" placeholder="Obrigatório"></textarea>
+    </label>
+    <button type="submit" class="btn-danger">Rejeitar</button>
+  </form>
+</div>
+{% else %}
+<section class="panel">
+  <h2>Decisão</h2>
+  <dl class="kv">
+    <dt>Por</dt><dd>{{ sol.decidido_por }}</dd>
+    <dt>Em</dt><dd>{{ sol.decidido_em|br_dt }}</dd>
+    <dt>Motivo</dt><dd>{{ sol.motivo_decisao or '—' }}</dd>
+  </dl>
+</section>
+{% endif %}
+
+<p><a href="/admin/pendentes">Voltar às pendentes</a></p>
+{% endblock %}

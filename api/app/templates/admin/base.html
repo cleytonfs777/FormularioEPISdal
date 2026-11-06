@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Admin EPIs{% endblock %} — CBMMG</title>
+  <link rel="stylesheet" href="/static/admin/css/admin.css">
+  <link rel="icon" type="image/png" href="/static/admin/img/logo.png">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="logo-sidebar" src="/static/admin/img/logo.png" alt="CBMMG" width="72" height="72">
+      <strong>CBMMG</strong>
+      <span>Controle de EPIs</span>
+    </div>
+    <nav>
+      <a href="/admin/pendentes" class="{% if request.url.path.startswith('/admin/pendentes') or '/solicitacao/' in request.url.path %}on{% endif %}">Pendentes</a>
+      <a href="/admin/historico" class="{% if request.url.path.startswith('/admin/historico') %}on{% endif %}">Histórico</a>
+    </nav>
+    <form method="post" action="/admin/logout" class="logout">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button type="submit">Sair</button>
+    </form>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <div>
+        <h1>{% block h1 %}Painel{% endblock %}</h1>
+        <p class="sub">{% block sub %}Revisão de alterações críticas de EPI{% endblock %}</p>
+      </div>
+      <div class="who">{{ admin_user }}</div>
+    </header>
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

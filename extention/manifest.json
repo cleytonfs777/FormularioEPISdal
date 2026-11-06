@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "CBMMG - Formulário EPIs (LOIQ)",
+  "version": "1.3.1",
+  "description": "Injeta a aba 'Formulário EPIs' no LOIQ do SIGPBI quando há o link AADP na página.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["info.html", "manual/*"],
+      "matches": [
+        "https://www.sigpbicbmmg.mg.gov.br/*",
+        "https://sigpbicbmmg.mg.gov.br/*",
+        "http://www.sigpbicbmmg.mg.gov.br/*",
+        "http://sigpbicbmmg.mg.gov.br/*"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.sigpbicbmmg.mg.gov.br/*",
+        "https://sigpbicbmmg.mg.gov.br/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Formulário EPIs",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
+}

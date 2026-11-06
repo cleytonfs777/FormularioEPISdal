@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+{% block title %}Pendentes{% endblock %}
+{% block h1 %}Solicitações pendentes{% endblock %}
+{% block sub %}Alterações POSSUI → NÃO POSSUI aguardando decisão{% endblock %}
+{% block content %}
+{% if request.query_params.get('ok') == 'aprovada' %}
+<p class="alert-ok">Solicitação aprovada e gravada no banco.</p>
+{% elif request.query_params.get('ok') == 'rejeitada' %}
+<p class="alert-ok">Solicitação rejeitada.</p>
+{% endif %}
+
+<form class="filters" method="get" action="/admin/pendentes">
+  <label>Nº BM <input type="text" name="num_bm" value="{{ num_bm }}"></label>
+  <label>Autor <input type="text" name="autor" value="{{ autor }}"></label>
+  <label>De <input type="date" name="de" value="{{ de }}"></label>
+  <label>Até <input type="date" name="ate" value="{{ ate }}"></label>
+  <button type="submit" class="btn-primary">Filtrar</button>
+</form>
+
+<table class="tbl">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nº BM</th>
+      <th>Campo</th>
+      <th>De</th>
+      <th>Para</th>
+      <th>Justificativa</th>
+      <th>Solicitado por</th>
+      <th>Em</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td>{{ r.num_bm }}</td>
+      <td>{{ rotulo(r.campo) }}</td>
+      <td>{{ r.valor_anterior }}</td>
+      <td>{{ r.valor_novo }}</td>
+      <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ r.justificativa or '' }}">{{ r.justificativa or '—' }}</td>
+      <td class="muted">{{ r.solicitado_por }}</td>
+      <td>{{ r.solicitado_em|br_dt }}</td>
+      <td><a href="/admin/solicitacao/{{ r.id }}">Abrir</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="empty">Nenhuma solicitação pendente.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="count">{{ rows|length }} registro(s)</p>
+{% endblock %}

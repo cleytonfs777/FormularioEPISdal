@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: system-ui, sans-serif; width: 300px; padding: 14px; margin: 0; color: #111827; }
+    h3 { margin: 0 0 8px; font-size: 1rem; }
+    p  { font-size: 12px; color: #374151; line-height: 1.5; margin: 8px 0; }
+    .badge { display: inline-block; background: #b71c1c; color: #fff; font-size: 11px;
+             padding: 2px 8px; border-radius: 999px; }
+    code { background: #f3f4f6; padding: 1px 4px; border-radius: 4px; font-size: 11px; }
+    ul { margin: 8px 0; padding-left: 18px; font-size: 12px; color: #374151; }
+    li { margin-bottom: 4px; }
+    .foot { font-size: 11px; color: #6b7280; margin-top: 10px; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+  </style>
+</head>
+<body>
+  <h3>Formulário EPIs <span class="badge">LOIQ</span></h3>
+  <p>Esta extensão injeta a aba <strong>“Formulário EPIs”</strong> nas páginas do SIGPBI
+     que contenham o link <code>AADP</code>.</p>
+  <ul>
+    <li>A aba aparece ao lado das existentes, no mesmo estilo.</li>
+    <li>As abas nativas continuam funcionando normalmente.</li>
+    <li>Ao abrir a aba, a extensão lê o número da ficha e consulta <code>localhost:8000</code>.</li>
+    <li>Identificação (Nº BM, P/G, nome, unidade…) é preenchida automaticamente.</li>
+    <li>Ao enviar, os dados são validados e registrados no console (F12).</li>
+  </ul>
+  <p class="foot">A API de teste precisa estar rodando em <code>http://localhost:8000</code>.
+     Recarregue a extensão após atualizar os arquivos.</p>
+</body>
+</html>

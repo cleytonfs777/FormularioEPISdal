@@ -1,0 +1,26 @@
+# Segredos
+.env
+.env.*
+!.env.example
+!**/.env.example
+**/service_account.json
+**/*credentials*.json
+
+# Ambientes e cache Python
+**/venv/
+**/__pycache__/
+**/*.pyc
+
+# Bancos e cópias locais (inclui o seed api/epi.db e data/epi.db)
+**/*.db
+**/*.db-*
+**/*.db-journal
+**/*.sqlite
+**/*.sqlite3
+data/*.bak*
+
+# Planilha local e trava do Excel/LibreOffice (dados nominais)
+*.xlsx
+*.xls
+.~lock.*
+**/.~lock.*
